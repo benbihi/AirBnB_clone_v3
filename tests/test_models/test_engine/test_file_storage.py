@@ -115,10 +115,12 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(json.loads(string), json.loads(js))
 
     def test_get(self):
+        """test function for the get methode"""
         obj = storage.get('SomeClass', 'some_id')
         self.assertIsNotNone(obj)
 
     def test_count(self):
+        """test function for the count method"""
         count = storage.count()
         self.assertIsInstance(count, int)
 

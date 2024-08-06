@@ -88,10 +88,12 @@ class TestFileStorage(unittest.TestCase):
         """Test that save properly saves objects to file.json"""
 
     def test_get(self):
+        """test function to the get method"""
         obj = storage.get('SomeClass', 'some_id')
         self.assertIsNotNone(obj)
 
     def test_count(self):
+        """test function to the count method"""
         count = storage.count()
         self.assertIsInstance(count, int)
 
