@@ -74,3 +74,24 @@ class DBStorage:
     def close(self):
         """call remove() method on the private session attribute"""
         self.__session.remove()
+
+    def get(self, cls, id):
+        """a getter method"""
+        try:
+            return self.__session.query(cls).get(id)
+        except Exception as e:
+            return None
+
+    def count(self, cls=None):
+        """a counter method to count number of instances in a class"""
+        try:
+            if cls:
+                return self.__session.query(cls).count()
+            else:
+                total_count = 0
+                for model in Base._decl_class_registry.values():
+                    if hasattr(model, '__tablename__'):
+                        total_count += self.__session.query(model).count()
+                return total_count
+        except Exception as e:
+            return None
