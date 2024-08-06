@@ -40,6 +40,22 @@ class FileStorage:
             key = obj.__class__.__name__ + "." + obj.id
             self.__objects[key] = obj
 
+    def get(self, cls, id):
+        """retuns the instances based on class and id"""
+        if cls is None or id is None:
+            return None
+        if isinstance(cls, type):
+            key = cls.__name__ + "." + id
+        else:
+            key = cls + "." + id
+        return self.__objects.get(key, None)
+
+    def count(self, cls=None):
+        """Returns number of instances in a class"""
+        if cls is None:
+            return len(self.__objects)
+        return len(self.all(cls))
+
     def save(self):
         """serializes __objects to the JSON file (path: __file_path)"""
         json_objects = {}
@@ -55,6 +71,8 @@ class FileStorage:
                 jo = json.load(f)
             for key in jo:
                 self.__objects[key] = classes[jo[key]["__class__"]](**jo[key])
+        except Exception as e:
+            pass
 
     def delete(self, obj=None):
         """delete obj from __objects if it’s inside"""
@@ -66,19 +84,3 @@ class FileStorage:
     def close(self):
         """call reload() method for deserializing the JSON file to objects"""
         self.reload()
-
-    def get(self, cls, id):
-        """a getter method"""
-        if cls is None or id is None:
-            return None
-        if isinstance(cls, type):
-            key = cls.__name__ + "." + id
-        else:
-            key = cls + "." + id
-        return self.__objects.get(key, None)
-
-    def count(self, cls=None):
-        """counter to count number of instances in a class"""
-        if cls is None:
-            return len(self.__objects)
-        return len(self.all(cls))
