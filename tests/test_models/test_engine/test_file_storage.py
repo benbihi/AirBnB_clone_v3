@@ -114,16 +114,30 @@ class TestFileStorage(unittest.TestCase):
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+        @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
-        """test function for the get methode"""
-
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
-    def test_count(self):
-        """test function for the count method"""
+        """test that get function works"""
         storage = FileStorage()
-        count = storage.count()
-        self.assertIsInstance(count, int)
+        storage.reload()
+        state_data = {"name": "Cairo"}
+        new_state = State(**state_data)
+        retrieved_state = srorage.get(State, new_instance.id)
 
-        specific_count = storage.count('State')
-        self.assertIsInstance(specific_count, int)
+        self.assertEqual(retrieved_state, new_state)
+        fake = storage.get(State, 'fake_id')
+        self.assertEqual(fake, None)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_all(self):
+        """test that all function works"""
+        storage = FileStorage()
+        storage.reload()
+        state_data = {"name": "Cairo"}
+        new_state = State(**state_data)
+        storage.new(new_state)
+        city_data = {"name": "Faisal", "state_id": new_state.id}
+        new_city = City(**city_data)
+        storage.new(new_city)
+        storage.save()
+        states = storage.count(State)
+        self.assertEqual(states, len(storage.all(State)))
