@@ -23,6 +23,7 @@ def teardown_db(exception):
 
 @app.errorhandler(404)
 def not_found(error):
+    """404 route """
     data = {"error": "Not found"}
     json_data = json.dumps(data, indent=2) + '\n'
     response = Response(json_data, mimetype='application/json')
@@ -32,6 +33,7 @@ def not_found(error):
 
 @app.errorhandler(400)
 def bad_request(error):
+    """400 route"""
     json_data = json.dumps({"error": "Not a JSON"}, indent=2) + '\n'
     response = Response(json_data, mimetype='application/json')
     response.status_code = 400
